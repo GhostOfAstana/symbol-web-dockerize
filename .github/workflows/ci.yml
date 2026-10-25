@@ -1,0 +1,33 @@
+name: Проверка проекта
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Форматирование
+        run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test -race -cover ./...
+      - name: Фаззинг показателей
+        run: go test ./internal/monitor -run '^$' -fuzz FuzzScore -fuzztime 10s
+      - run: go run ./cmd/health-monitor --lint Dockerfile
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Сборка, запуск, живые показатели и очистка
+        run: bash scripts/docker-smoke.sh

@@ -1,0 +1,12 @@
+{{define "result"}}
+{{if .Art}}<p class="notice success" role="status">Надпись готова. Пробелы и переносы сохранены.</p><pre id="art-output" class="art" tabindex="0" aria-label="Надпись из символов">{{.Art}}</pre><button class="secondary" id="copy-art" type="button">Скопировать результат</button>
+<p id="copy-status" role="status" aria-live="polite">
+</p>{{else}}<div class="empty"><pre aria-hidden="true"> _    _
+| |  | |
+| |__| | ___
+|  __  |/ _ \
+| |  | | (_) |
+|_|  |_|\___/</pre><p>Здесь появится ваша надпись.</p>
+<small>Начните с короткого слова — например, Hello.</small>
+</div>{{end}}
+{{end}}

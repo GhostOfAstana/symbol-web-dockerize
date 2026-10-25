@@ -1,0 +1,8 @@
+/bin/
+/server
+/health-monitor
+*.out
+*.prof
+coverage*
+.env
+.DS_Store

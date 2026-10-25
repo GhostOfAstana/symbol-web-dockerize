@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ASCII-мастерская с контейнерным мониторингом: три шрифта, понятный интерфейс и Docker.">
+  <title>Символы · Docker-мастерская</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/script.js" defer>
+</script>
+  <script src="/static/js/text-assist.js" defer>
+</script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">К генератору</a>
+  <header class="site-header">
+<a class="brand" href="/" aria-label="На главную">[ S ] <span>Символы</span>
+</a>
+<span class="tag">Docker-мастерская</span>
+</header>
+  <main id="workspace">
+    <div class="intro">
+<p class="eyebrow">От текста к характеру</p>
+<h1>Буквы, которые<br>занимают пространство.</h1>
+<p>Выберите шрифт и соберите надпись из обычных символов. Приложение готово к запуску в Docker.</p>
+</div>
+    {{if .Error}}<p class="notice error" role="alert">{{.Error}}</p>{{end}}
+    <section class="workspace" aria-label="Генератор надписей">
+      <div class="panel">
+        <div class="panel-heading">
+<span class="step">01</span>
+<h2>Ваша надпись</h2>
+</div>
+        <form method="post" action="/symbol-art" id="art-form">
+          <label for="text-input">Текст</label>
+          <textarea id="text-input" name="text" rows="5" maxlength="4096" required aria-describedby="text-help" placeholder="Hello, Docker!">{{.Text}}</textarea>
+          <p id="text-help" class="help">Латинские буквы, цифры и знаки ASCII. Можно несколько строк; предел — 4096 байт.</p>
+          <label for="banner">Шрифт</label>
+          <select id="banner" name="banner">
+<option value="standard" {{if eq .Banner "standard"}}selected{{end}}>Standard — классический</option>
+<option value="shadow" {{if eq .Banner "shadow"}}selected{{end}}>Shadow — с тенью</option>
+<option value="thinkertoy" {{if eq .Banner "thinkertoy"}}selected{{end}}>Thinkertoy — графичный</option>
+</select>
+          <button class="primary" id="generate" type="submit">
+<span>Создать надпись</span>
+<span aria-hidden="true">↗</span>
+</button>
+        </form>
+        <div class="assist-tools">
+<button type="button" class="secondary" id="recommend-banner">Подобрать шрифт</button>
+<button type="button" class="secondary" id="variations">Варианты текста</button>
+</div>
+        <p id="assist-status" class="help" role="status" aria-live="polite">
+</p>
+<div id="suggestions" class="suggestions" aria-label="Подсказки текста">
+</div>
+      </div>
+      <div class="panel output-panel">
+        <div class="panel-heading">
+<span class="step">02</span>
+<h2>Результат</h2>
+</div>
+        {{template "result" .}}
+      </div>
+    </section>
+    <section class="monitor-panel" aria-labelledby="monitor-title">
+<div>
+<p class="eyebrow">Наблюдаемость</p>
+<h2 id="monitor-title">Состояние контейнера</h2>
+<p>Четыре живых показателя, одна объяснимая оценка. HTTP-монитор включается на Docker-хосте через MONITOR_CONTAINER.</p>
+</div>
+<div>
+<button type="button" class="secondary" id="check-health">Проверить контейнер</button><pre id="health-output" tabindex="0" aria-label="Отчёт монитора">Нажмите кнопку, чтобы запросить показатели.</pre><p id="health-status" role="status" aria-live="polite">
+</p>
+</div>
+</section>
+  </main>
+  <footer>
+<span>symbol-web-dockerize</span>
+<span>Go · Docker · Только стандартные пакеты</span>
+</footer>
+</body>
+</html>
